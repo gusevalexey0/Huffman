@@ -116,15 +116,15 @@ void decode(std::istream &input, std::ostream &output) {
 	unsigned char cur, nxt = '!';
 	in.read(cur);
 	bool last_time = true, succ;
-	int CONDITION = 0;
+	int CONDITION = -1;
 	while ((succ = in.read(nxt)) || last_time) {
 		if (!succ) {
 			if (special == 0 && nxt != '!')
 			    special = 8;
 			last_time = false;
-			CONDITION = 8 - special;
+			CONDITION = 7 - special;
 		}
-		for (int j = 7; j >= CONDITION; --j) {
+		for (int j = 7; j > CONDITION; --j) {
 			bool direction = cur & (1 << j);
 			trie.step(direction);
 			if (trie.isTerminal()) {

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "huffman.cpp"
+#include "compression.h"
 #include <functional>
 #include <random>
 namespace {
@@ -20,34 +20,6 @@ namespace {
 		auto rc = std::bind(std::uniform_int_distribution<>(0, 255), std::mt19937(seed));
 		std::generate_n(s.begin(), size, rc);
 		return s;
-	}
-}
-
-
-TEST(invalid, incorect_decompress) {
-	std::stringstream in0("");
-	std::stringstream in1("This is test string");
-	std::stringstream in2(std::string{ '\0' } + "This is a test string");
-	std::stringstream in3(std::string{ '\7' } + "This is a test string");
-	std::stringstream in4(std::string{ '\0' } + "����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������");
-	std::stringstream in5(std::string{ '\7' } + "����������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������");
-	std::stringstream in6(std::string{ '\0' } + "������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������");
-	std::stringstream out;
-
-	EXPECT_ANY_THROW(decode(in0, out));
-	EXPECT_ANY_THROW(decode(in1, out));
-	EXPECT_ANY_THROW(decode(in2, out));
-	EXPECT_ANY_THROW(decode(in3, out));
-	EXPECT_ANY_THROW(decode(in4, out));
-	EXPECT_ANY_THROW(decode(in5, out));
-	EXPECT_ANY_THROW(decode(in6, out));
-}
-TEST(invalid, crazy_incorect_decompress) {
-	for (std::size_t i = 0; i < 50; ++i) {
-		std::string s = random_string(100000);
-		std::stringstream in(s);
-		std::stringstream out;
-		EXPECT_ANY_THROW(decode(in, out));
 	}
 }
 
